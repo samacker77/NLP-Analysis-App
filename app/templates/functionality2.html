@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>NLP Analysis App</title>
+    <style>
+        body {
+  background-color: purple;
+}
+   .dropdown {list-style: none; background: white; padding: 5px; display: inline-block;border-radius:5px}
+   .dropdown .btn {background: white; color:black;}
+
+
+
+
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">NLP ANALYSIS APP | Generate Corpus</h1>
+<div style="margin-top:100px;margin-left:500px;margin-right:500px">
+
+<div class="dropdown" style="margin-left:45px;margin-top:0px;margin-bottom:50px">
+  <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SEE UPLOADED FILES
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">File 1</a>
+    <a class="dropdown-item" href="#">File 1</a>
+    <a class="dropdown-item" href="#">File 1</a>
+  </div>
+</div>
+
+      <div class="input-group mb-3">
+  <div class="custom-file">
+  </div>
+  <div class="input-group mb-3" style="margin-left:40px">
+  <div class="input-group-prepend" style="margin-left:0px;margin-right:-10px">
+    <span class="input-group-text" id="basic-addon3">Files (space separated)</span>
+  </div>
+  <input type="text" class="form-control" id="getFileNames" aria-describedby="basic-addon3">
+</div>
+          <div class="input-group-append" style="margin-left:150px;margin-top:50px">
+    <button type="button" class="btn btn-light" id="generateCorpus" style="border-radius:5px">Generate & Save Corpus</button>
+
+  </div>
+
+          <div class="input-group-append" style="margin-left:180px;margin-top:50px">
+    <button type="button" class="btn btn-light" id="downloadCorpus" style="border-radius:5px">Download Corpus</button>
+
+  </div>
+<hr>
+
+
+<div style="margin-left:800px">
+    <button type="button" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality3') }}';" class="btn btn-light" style="margin-top:0px;">NEXT</button>
+</div>
+</body>
+</html>

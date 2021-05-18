@@ -4,10 +4,96 @@
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title>NLP Analysis App</title>
+    <style>
+        body {
+  background-color: purple;
+}
+   .dropdown {list-style: none; background: white; padding: 5px; display: inline-block;border-radius:5px}
+   .dropdown .btn {background: white; color:black;}
+   .features {
+  margin-top: 0px;
+  min-height: 50px;
+  border-radius: 7px;
+  color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.bottom-right{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+
+
+    </style>
 </head>
 <body>
-    <h1 style="text-align:center;font-family: 'Montserrat', sans-serif;">NLP ANALYSIS APP</h1>
+    <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">NLP ANALYSIS APP</h1>
+<div style="margin-top:100px;margin-left:500px;margin-right:500px">
+    <div class="input-group mb-3">
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" id="inputGroupFile02">
+    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+  </div>
+  <div class="input-group-append">
+    <span class="input-group-text" id="fileUpload">Upload</span>
+
+  </div>
+</div>
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon3">File Name</span>
+  </div>
+  <input type="text" class="form-control" id="uploadFileName" aria-describedby="basic-addon3">
+</div>
+    </div>
+<hr>
+<div class="dropdown" style="margin-left:620px;margin-top:50px;margin-bottom:50px">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SEE UPLOADED FILES
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">File 1</a>
+    <a class="dropdown-item" href="#">File 1</a>
+    <a class="dropdown-item" href="#">File 1</a>
+  </div>
+</div>
+
+
+
+<hr>
+<div style="margin-top:50px;margin-left:500px;margin-right:500px">
+    <div class="input-group mb-3">
+  <div class="custom-file">
+  </div>
+  <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon3">File Name</span>
+  </div>
+  <input type="text" class="form-control" id="DownloadFileName" aria-describedby="basic-addon3">
+</div>
+    <div class="input-group-append">
+    <span class="input-group-text" id="fileDownload" style="margin-left:160px">Download</span>
+
+  </div>
+
+</div>
+
+    </div>
+
+<section class="features">
+    <div class = 'bottom-right'>
+    <button type="button" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality2') }}';" class="btn btn-light" style="margin-right:100px;width:100px">NEXT</button>
+  </div>
+
+</section>
 
 </body>
 </html>

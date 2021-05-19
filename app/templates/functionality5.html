@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -16,7 +16,6 @@
    .dropdown {list-style: none; background: white; padding: 5px; display: inline-block;border-radius:5px}
    .dropdown .btn {background: white; color:black;}
 
-
 .next {
   background-color : white;
   color: black;
@@ -31,13 +30,14 @@
   right: 10px;
 }
 
+
     </style>
 </head>
 <body>
-    <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">NLP ANALYSIS APP | Manipulation</h1>
+    <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">NLP ANALYSIS APP | Compare Corpuses</h1>
 <div style="margin-top:100px;margin-left:500px;margin-right:500px">
 
-<div class="dropdown" style="margin-left:35px;margin-top:0px;margin-bottom:50px">
+<div class="dropdown" style="margin-left:45px;margin-top:0px;margin-bottom:50px">
   <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     SEE UPLOADED FILES
   </button>
@@ -57,25 +57,23 @@
   </div>
   <input type="text" class="form-control" id="getFileNames" aria-describedby="basic-addon3">
 </div>
-        <div class="input-group-prepend", style="margin-left:35px;margin-right:0px">
+  <div class="input-group-prepend", style="margin-left:35px;margin-right:0px">
     <span class="input-group-text" id="basic-addon3">Text</span>
   </div>
-  <input type="text" class="form-control" id="text" aria-describedby="basic-addon3">
+  <input type="text" class="form-control" id="text5" aria-describedby="basic-addon3">
       </div>
-  <div class="form-row align-items-center">
-    <div class="col-md-4 ">
-        <button type="button" class="btn form-control" id="replace">Replace</button>
-    </div>
-    <div class="col-md-4">
-        <button type="button" class="btn form-control" id="delete">Delete</button>
-    </div>
-      <div class="col-md-4">
-        <button type="button" class="btn form-control" id="append">Append</button>
-      </div>
-  </div>
-<div id="next">
-<button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality4') }}';">NEXT</button>
 </div>
+    <div class="input-group-append" style="margin-left:700px;">
+    <button type="button" class="btn btn-light" id="compare" style="border-radius:5px">Compare</button>
+
+  </div>
+<hr>
+
+
+<div id="next">
+<button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality6') }}';">NEXT</button>
+</div>
+      </div>
 </div>
 </body>
 </html>

@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">NLP ANALYSIS APP | Manipulation</h1>
+    <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">NLP ANALYSIS APP | Statistical Analysis</h1>
 <div style="margin-top:100px;margin-left:500px;margin-right:500px">
 
 <div class="dropdown" style="margin-left:35px;margin-top:0px;margin-bottom:50px">
@@ -57,24 +57,30 @@
   </div>
   <input type="text" class="form-control" id="getFileNames" aria-describedby="basic-addon3">
 </div>
-        <div class="input-group-prepend", style="margin-left:35px;margin-right:0px">
+        <div class="input-group-prepend", style="margin-left:35px;margin-right:-2px">
     <span class="input-group-text" id="basic-addon3">Text</span>
   </div>
   <input type="text" class="form-control" id="text" aria-describedby="basic-addon3">
       </div>
-  <div class="form-row align-items-center">
-    <div class="col-md-4 ">
-        <button type="button" class="btn form-control" id="replace">Replace</button>
+
+
+   <form>
+       <h4 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:25px;margin-top:80px">Find Sequences </h4>
+  <div class="form-row">
+    <div class="col">
+      <input type="text" class="form-control" id="sequence" placeholder="Sequence" name="top_number">
     </div>
-    <div class="col-md-4">
-        <button type="button" class="btn form-control" id="delete">Delete</button>
+    <div class="col">
+      <input type="text" class="form-control" id="ngram" placeholder="N-Gram" name="pswd">
     </div>
-      <div class="col-md-4">
-        <button type="button" class="btn form-control" id="append">Append</button>
+      <div class="col">
+        <button type="button" class="btn form-control" id="send">Send</button>
       </div>
   </div>
+</form>
+
 <div id="next">
-<button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality4') }}';">NEXT</button>
+<button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality5') }}';">NEXT</button>
 </div>
 </div>
 </body>

@@ -16,7 +16,19 @@
    .dropdown {list-style: none; background: white; padding: 5px; display: inline-block;border-radius:5px}
    .dropdown .btn {background: white; color:black;}
 
+.next {
+  background-color : white;
+  color: black;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border-color: white;
+}
 
+#next {
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+}
 
 
     </style>
@@ -57,8 +69,10 @@
 <hr>
 
 
-<div style="margin-left:800px">
-    <button type="button" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality3') }}';" class="btn btn-light" style="margin-top:0px;">NEXT</button>
+<div id="next">
+<button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality3') }}';">NEXT</button>
+</div>
+      </div>
 </div>
 </body>
 </html>

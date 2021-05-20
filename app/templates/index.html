@@ -30,6 +30,19 @@
   right: 0;
 }
 
+.next {
+  background-color : white;
+  color: black;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border-color: white;
+}
+
+#next {
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+}
 
 
     </style>
@@ -77,12 +90,38 @@
 
 <!----->
     <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">Upload/Download</h1>
-<div style="margin-top:100px;margin-left:500px;margin-right:500px">
+<div style="margin-top:200px;margin-left:500px;margin-right:500px">
     <div class="input-group mb-3">
   <div class="custom-file">
     <form action="/" method="POST" enctype="multipart/form-data">
         <input style="background-color:white;margin-right:30px" type=file name=file>
-        <input type=submit value=Upload>
+        <input type=submit value=Upload name="upload">
+        <div class="input-group mb-3" style="margin-top:50px;">
+            <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">File Name</span>
+        </div>
+        <input type="text" class="form-control" id="uploadFileName" name="filename" aria-describedby="basic-addon3">
+</div>
+        <div class="dropdown" style="margin-left:100px;margin-top:50px;margin-bottom:50px">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SEE UPLOADED FILES
+  </button>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+      {% for each in uploaded_files %}
+        <option class="dropdown-item" value="{{each}}">{{each}}</option>
+    {% endfor %}
+  </div>
+</div>
+        <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon3">File Name</span>
+  </div>
+  <input type="text" class="form-control" id="DownloadFileName" name="downloadfilename" aria-describedby="basic-addon3">
+</div>
+    <div class="input-group-append">
+   <input type=submit value=Download name="download" style="margin-left:170px;height:40px;width:100px;border-radius:5px;">
+
+  </div>
     </form>
   </div>
   <div class="input-group-append">
@@ -92,53 +131,15 @@
 
   </div>
 </div>
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon3">File Name</span>
-  </div>
-  <input type="text" class="form-control" id="uploadFileName" aria-describedby="basic-addon3">
-</div>
-    </div>
-<hr>
-<div class="dropdown" style="margin-left:620px;margin-top:50px;margin-bottom:50px">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    SEE UPLOADED FILES
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">File 1</a>
-    <a class="dropdown-item" href="#">File 1</a>
-    <a class="dropdown-item" href="#">File 1</a>
-  </div>
-</div>
-
-
-
-<hr>
-<div style="margin-top:50px;margin-left:500px;margin-right:500px">
-    <div class="input-group mb-3">
-  <div class="custom-file">
-  </div>
-  <div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon3">File Name</span>
-  </div>
-  <input type="text" class="form-control" id="DownloadFileName" aria-describedby="basic-addon3">
-</div>
-    <div class="input-group-append">
-    <span class="input-group-text" id="fileDownload" style="margin-left:160px">Download</span>
-
-  </div>
-
-</div>
 
     </div>
+<hr>
 
-<section class="features">
-    <div class = 'bottom-right'>
-    <button type="button" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality2') }}';" class="btn btn-light" style="margin-right:100px;width:100px">NEXT</button>
-  </div>
+<hr>
 
-</section>
+<div id="next">
+<button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality2') }}';">NEXT</button>
+</div>
 
 </body>
 </html>

@@ -62,9 +62,21 @@
     </span>
   </div>
 </nav>
+<script type="text/javascript">window.setTimeout("document.getElementById('successMessage').style.display='none';", 2000); </script>
 
+<h3 style="color:white;text-align:center" id="successMessage"> {{corpus_generation_status}} </h3>
 
-<!----->
+<!----->{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <script>
+      var messages = {{ messages | safe }};
+      for (var i=0; i<messages.length; i++) {
+        alert(messages[i]);
+      }
+    </script>
+  {% endif %}
+{% endwith %}
+
     <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">Generate Corpus</h1>
 <div style="margin-top:100px;margin-left:500px;margin-right:500px">
 
@@ -72,31 +84,34 @@
   <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     SEE UPLOADED FILES
   </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">File 1</a>
-    <a class="dropdown-item" href="#">File 1</a>
-    <a class="dropdown-item" href="#">File 1</a>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+      {% for each in uploaded_files %}
+    <option class="dropdown-item" value="{{each}}">{{each}}</option>
+      {% endfor %}
   </div>
 </div>
 
       <div class="input-group mb-3">
   <div class="custom-file">
   </div>
+          <form action="/functionality2" method="POST" enctype="multipart/form-data">
   <div class="input-group mb-3" style="margin-left:40px">
   <div class="input-group-prepend" style="margin-left:0px;margin-right:-10px">
     <span class="input-group-text" id="basic-addon3">Files (space separated)</span>
   </div>
-  <input type="text" class="form-control" id="getFileNames" aria-describedby="basic-addon3">
+  <input type="text" class="form-control" name="getFileNames" aria-describedby="basic-addon3">
 </div>
+
           <div class="input-group-append" style="margin-left:150px;margin-top:50px">
-    <button type="button" class="btn btn-light" id="generateCorpus" style="border-radius:5px">Generate & Save Corpus</button>
+    <input type=submit value="Generate and Save Corpus" name="generateCorpus" style="height:40px;border-radius:5px;">
 
   </div>
 
           <div class="input-group-append" style="margin-left:180px;margin-top:50px">
-    <button type="button" class="btn btn-light" id="downloadCorpus" style="border-radius:5px">Download Corpus</button>
+    <input type="submit" value="Download Corpus" class="btn btn-light" name="downloadCorpus" style="border-radius:5px">
 
   </div>
+              </form>
 <hr>
 
 

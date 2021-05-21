@@ -72,13 +72,14 @@
   <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     SEE UPLOADED FILES
   </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">File 1</a>
-    <a class="dropdown-item" href="#">File 1</a>
-    <a class="dropdown-item" href="#">File 1</a>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+    {% for each in uploaded_files %}
+        <option class="dropdown-item" value="{{each}}">{{each}}</option>
+    {% endfor %}
   </div>
 </div>
 
+    <form action="/functionality3" method="POST" enctype="multipart/form-data">
       <div class="input-group mb-3">
   <div class="custom-file">
   </div>
@@ -86,24 +87,29 @@
   <div class="input-group-prepend" style="margin-left:0px;margin-right:-10px">
     <span class="input-group-text" id="basic-addon3">Files (space separated)</span>
   </div>
-  <input type="text" class="form-control" id="getFileNames" aria-describedby="basic-addon3">
+  <input type="text" class="form-control"  name="getFileNames" aria-describedby="basic-addon3">
 </div>
         <div class="input-group-prepend", style="margin-left:35px;margin-right:0px">
     <span class="input-group-text" id="basic-addon3">Text</span>
   </div>
-  <input type="text" class="form-control" id="text" aria-describedby="basic-addon3">
+  <input type="text" class="form-control" name="text" aria-describedby="basic-addon3">
       </div>
-  <div class="form-row align-items-center">
-    <div class="col-md-4 ">
-        <button type="button" class="btn form-control" id="replace">Replace</button>
+  <div class="form-row align-items-center" style="width:500px;">
+       <div class="col-md-3 ">
+        <input type="text" class="form-control" value="text" name="replace_text" aria-describedby="basic-addon3">
     </div>
-    <div class="col-md-4">
-        <button type="button" class="btn form-control" id="delete">Delete</button>
+    <div class="col-md-3 ">
+        <input type="submit" class="btn form-control" name="replace" value="Replace">
     </div>
-      <div class="col-md-4">
-        <button type="button" class="btn form-control" id="append">Append</button>
+
+    <div class="col-md-3">
+        <input type="submit" class="btn form-control" name="delete" value="Delete">
+    </div>
+      <div class="col-md-3">
+        <input type="submit" class="btn form-control" name="append" value="Append">
       </div>
   </div>
+    </form>
 <div id="next">
 <button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality4') }}';">NEXT</button>
 </div>

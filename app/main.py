@@ -14,13 +14,22 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = DOWLOAD_FOLDER
 app.secret_key = "jhkafshjkfhfsd"
 CORPUS_FOLDER = 'app/corpuses'
+
+try:
+    uploaded_files = os.listdir(UPLOAD_FOLDER)
+except:
+    uploaded_files = ['No uploaded files']
+
+def find_relevant_files(filenames):
+    all_files = filenames.split()
+    global uploaded_files
+    relevant_files = list(set(uploaded_files).intersection(set(all_files)))
+    return relevant_files
+
 import time
 @app.route('/',methods=['POST','GET'])
 def home():
-    try:
-        uploaded_files = os.listdir(UPLOAD_FOLDER)
-    except:
-        uploaded_files = ['No uploaded files']
+    global uploaded_files
     if len(uploaded_files)==0:
         uploaded_files=['No uploaded files']
     if request.method == 'POST' and request.form.get('upload'):
@@ -51,15 +60,12 @@ def home():
 @app.route('/<page>',methods=['POST','GET'])
 def gotoNextPage(page):
     print(page)
+    global uploaded_files
     if page == 'functionality2':
-
-        uploaded_files = os.listdir(UPLOAD_FOLDER)
         corpus_generation_status = ""
         if request.method == 'POST' and request.form.get('generateCorpus'):
-            print(">>" * 50)
             file = request.form['getFileNames']
-            all_files = file.split()
-            relevant_files = list(set(uploaded_files).intersection(set(all_files)))
+            relevant_files=find_relevant_files(file)
             corpus_text = []
             for f in relevant_files:
                 text = str(textract.process(os.path.join('app/uploads',f)))
@@ -83,13 +89,28 @@ def gotoNextPage(page):
                 return send_file(path, as_attachment=True)
             else:
                 flash("No corpuses found")
-
-
-
-
-
-
         return render_template('functionality2.html',uploaded_files=uploaded_files,corpus_generation_status=corpus_generation_status)
+    elif page == 'functionality3':
+        if request.method == 'POST' and request.form.get('replace'):
+            file = request.form['getFileNames']
+            relevant_files = find_relevant_files(file)
+            replace=request.form['text']
+            replaced_by=request.form['replace_text']
+            for f in relevant_files:
+                text = str(textract.process(os.path.join('app/uploads', f)))
+                final_text=text.replace(replace,replaced_by)
+                fin = open(f, "wt")
+                fin.write(final_text)
+                fin.close()
+        elif request.method == 'POST' and request.form.get('delete'):
+            file = request.form['getFileNames']
+            relevant_files = find_relevant_files(file)
+            text=request.form['text']
+        elif request.method == 'POST' and request.form.get('append'):
+            file = request.form['getFileNames']
+            relevant_files = find_relevant_files(file)
+            text=request.form['text']
+        return render_template('functionality3.html', uploaded_files=uploaded_files)
     return render_template(str(page)+'.html')
 
 

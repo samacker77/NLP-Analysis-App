@@ -62,6 +62,20 @@
     </span>
   </div>
 </nav>
+<script type="text/javascript">window.setTimeout("document.getElementById('replaceMessage').style.display='none';", 2000); </script>
+
+<h3 style="color:white;text-align:center" id="replaceMessage"> {{replace_status}} </h3>
+
+
+<script type="text/javascript">window.setTimeout("document.getElementById('deleteMessage').style.display='none';", 2000); </script>
+
+<h3 style="color:white;text-align:center" id="deleteMessage"> {{deletion_status}} </h3>
+
+
+<script type="text/javascript">window.setTimeout("document.getElementById('appendMessage').style.display='none';", 2000); </script>
+
+<h3 style="color:white;text-align:center" id="appendMessage"> {{appened_status}} </h3>
+
 
 
 <!----->
@@ -76,6 +90,17 @@
     {% for each in uploaded_files %}
         <option class="dropdown-item" value="{{each}}">{{each}}</option>
     {% endfor %}
+  </div>
+</div>
+
+    <div class="dropdown" style="margin-left:45px;margin-top:0px;margin-bottom:50px">
+  <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SEE GENERATED CORPUSES
+  </button>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+      {% for each in generated_corpuses %}
+    <option class="dropdown-item" value="{{each}}">{{each}}</option>
+      {% endfor %}
   </div>
 </div>
 

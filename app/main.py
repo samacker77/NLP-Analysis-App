@@ -4,6 +4,11 @@ import os
 import shutil
 import textract
 import datetime
+import nltk
+from collections import Counter
+import jinja2
+env = jinja2.Environment()
+
 
 UPLOAD_FOLDER = 'app/uploads/'
 DOWLOAD_FOLDER= 'app/downloads/'
@@ -15,21 +20,44 @@ app.config['DOWNLOAD_FOLDER'] = DOWLOAD_FOLDER
 app.secret_key = "jhkafshjkfhfsd"
 CORPUS_FOLDER = 'app/corpuses'
 
-try:
+
+def get_uploaded_files():
+    global UPLOAD_FOLDER
     uploaded_files = os.listdir(UPLOAD_FOLDER)
-except:
-    uploaded_files = ['No uploaded files']
+    if not uploaded_files:
+        uploaded_files = ['No uploaded files']
+    return uploaded_files
+
+def get_corpuses():
+    global CORPUS_FOLDER
+    uploaded_files = os.listdir(CORPUS_FOLDER)
+    all_corpuses = [corpus for corpus in uploaded_files if corpus.endswith(".txt")]
+    if not all_corpuses:
+        all_corpuses = ['No corpus found']
+    return all_corpuses
+
+
+
 
 def find_relevant_files(filenames):
     all_files = filenames.split()
-    global uploaded_files
+    uploaded_files = get_uploaded_files()
     relevant_files = list(set(uploaded_files).intersection(set(all_files)))
     return relevant_files
+
+def find_relevant_corpuses(filenames):
+    all_files = filenames.split()
+    global CORPUS_FOLDER
+    all_corpuses = os.listdir(CORPUS_FOLDER)
+    all_corpuses = [corpus for corpus in all_corpuses if corpus.endswith(".txt")]
+    relevant_corpuses = list(set(all_corpuses).intersection(set(all_files)))
+    return relevant_corpuses
 
 import time
 @app.route('/',methods=['POST','GET'])
 def home():
-    global uploaded_files
+    uploaded_files = get_uploaded_files()
+
     if len(uploaded_files)==0:
         uploaded_files=['No uploaded files']
     if request.method == 'POST' and request.form.get('upload'):
@@ -41,7 +69,7 @@ def home():
         if file and allowed_file(filename):
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             flash("File Uploaded")
-            uploaded_files = os.listdir(UPLOAD_FOLDER)
+            uploaded_files = get_uploaded_files()
         else:
             flash("File cannot be uploaded")
     if request.method == 'POST' and request.form.get('download'):
@@ -60,7 +88,7 @@ def home():
 @app.route('/<page>',methods=['POST','GET'])
 def gotoNextPage(page):
     print(page)
-    global uploaded_files
+    uploaded_files = get_uploaded_files()
     if page == 'functionality2':
         corpus_generation_status = ""
         if request.method == 'POST' and request.form.get('generateCorpus'):
@@ -89,28 +117,241 @@ def gotoNextPage(page):
                 return send_file(path, as_attachment=True)
             else:
                 flash("No corpuses found")
-        return render_template('functionality2.html',uploaded_files=uploaded_files,corpus_generation_status=corpus_generation_status)
+        uploaded_files = get_uploaded_files()
+        return render_template('functionality2.html',uploaded_files=uploaded_files,
+                               corpus_generation_status=corpus_generation_status)
     elif page == 'functionality3':
+        replace_status = ""
+        deletion_status = ""
+        appened_status = ""
+        generated_corpuses = get_corpuses()
+
         if request.method == 'POST' and request.form.get('replace'):
             file = request.form['getFileNames']
+            if not file:
+                replace_status = "Please input filename to manipulate"
+                return render_template('functionality3.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, replace_status=replace_status,
+                                       deletion_status=deletion_status, appened_status=appened_status)
             relevant_files = find_relevant_files(file)
+            relevant_corpuses = find_relevant_corpuses(file)
+            if not relevant_files and not relevant_corpuses:
+                flash("Error! No such file exist")
             replace=request.form['text']
             replaced_by=request.form['replace_text']
+            if not replace or not replaced_by:
+                replace_status = "No such file exists"
+                return render_template('functionality3.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, replace_status=replace_status,
+                                       deletion_status=deletion_status, appened_status=appened_status)
             for f in relevant_files:
                 text = str(textract.process(os.path.join('app/uploads', f)))
                 final_text=text.replace(replace,replaced_by)
-                fin = open(f, "wt")
-                fin.write(final_text)
-                fin.close()
+                with open(os.path.join("app/uploads",f.split(".")[0]+'.txt'),'w') as fin:
+                    fin.write(final_text)
+                    fin.close()
+            for f in relevant_corpuses:
+                text = str(textract.process(os.path.join('app/corpuses', f)))
+                final_text=text.replace(replace,replaced_by)
+                with open(os.path.join("app/corpuses",f.split(".")[0]+'.txt'),'w') as fin:
+                    fin.write(final_text)
+                    fin.close()
+            replace_status = "Text replaced successfully"
+            uploaded_files = get_uploaded_files()
+            generated_corpuses = get_corpuses()
+
+
         elif request.method == 'POST' and request.form.get('delete'):
             file = request.form['getFileNames']
+            if not file:
+                deletion_status = "Please input filename to manipulate"
+                return render_template('functionality3.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, replace_status=replace_status,
+                                       deletion_status=deletion_status, appened_status=appened_status)
+
+            delete_this = request.form['text']
+            if not delete_this:
+                deletion_status = "Please input text to delete."
+                return render_template('functionality3.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, replace_status=replace_status,
+                                       deletion_status=deletion_status, appened_status=appened_status)
             relevant_files = find_relevant_files(file)
-            text=request.form['text']
+            relevant_corpuses = find_relevant_corpuses(file)
+            if not relevant_files and not relevant_corpuses:
+                deletion_status = "No such file exists"
+                return render_template('functionality3.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, replace_status=replace_status,
+                                       deletion_status=deletion_status, appened_status=appened_status)
+            for f in relevant_files:
+                text = str(textract.process(os.path.join('app/uploads', f)))
+                final_text=text.replace(delete_this,"")
+                with open(os.path.join("app/uploads",f.split(".")[0]+'.txt'),'w') as fin:
+                    fin.write(final_text)
+                    fin.close()
+            for f in relevant_corpuses:
+                text = str(textract.process(os.path.join('app/corpuses', f)))
+                final_text=text.replace(delete_this,"")
+                with open(os.path.join("app/corpuses",f.split(".")[0]+'.txt'),'w') as fin:
+                    fin.write(final_text)
+                    fin.close()
+            deletion_status = "Text deleted successfully"
+            uploaded_files = get_uploaded_files()
+            generated_corpuses = get_corpuses()
+
         elif request.method == 'POST' and request.form.get('append'):
             file = request.form['getFileNames']
+            if not file:
+                appened_status = "Please input filename to manipulate"
+                return render_template('functionality3.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, replace_status=replace_status,
+                                       deletion_status=deletion_status, appened_status=appened_status)
+            append_this = request.form['text']
+            if not append_this:
+                appened_status = "Please input text to append"
+                return render_template('functionality3.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, replace_status=replace_status,
+                                       deletion_status=deletion_status, appened_status=appened_status)
             relevant_files = find_relevant_files(file)
-            text=request.form['text']
-        return render_template('functionality3.html', uploaded_files=uploaded_files)
+            relevant_corpuses = find_relevant_corpuses(file)
+            if not relevant_files and not relevant_corpuses:
+                appened_status = "No such file exists"
+                return render_template('functionality3.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, replace_status=replace_status,
+                                       deletion_status=deletion_status, appened_status=appened_status)
+            for f in relevant_files:
+                text = str(textract.process(os.path.join('app/uploads', f)))
+                final_text = text+" "+append_this
+                with open(os.path.join("app/uploads", f.split(".")[0] + '.txt'), 'w') as fin:
+                    fin.write(final_text)
+                    fin.close()
+            for f in relevant_corpuses:
+                text = str(textract.process(os.path.join('app/corpuses', f)))
+                final_text = text+" "+append_this
+                with open(os.path.join("app/corpuses", f.split(".")[0] + '.txt'), 'w') as fin:
+                    fin.write(final_text)
+                    fin.close()
+            appened_status = "Text appended successfully"
+            uploaded_files = get_uploaded_files()
+            generated_corpuses = get_corpuses()
+        return render_template('functionality3.html', uploaded_files=uploaded_files,
+                               generated_corpuses=generated_corpuses,replace_status=replace_status,
+                               deletion_status=deletion_status,appened_status=appened_status)
+
+
+    elif page == 'functionality4':
+        uploaded_files = get_uploaded_files()
+        generated_corpuses = get_corpuses()
+        status = ''
+        frequency = []
+        if request.method == 'POST' and request.form.get('frequency'):
+            files = request.form['files']
+            if not files:
+                status = "Please input file name"
+                return render_template('functionality4.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, status=status, frequency=frequency)
+            relevant_files = find_relevant_files(files)
+            relevant_corpuses = find_relevant_corpuses(files)
+            if not relevant_files and not relevant_corpuses:
+                status = "No such file exists"
+                return render_template('functionality4.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, status=status, frequency=frequency)
+            text_to_operate = request.form.get('text')
+            if not text_to_operate:
+                return render_template('functionality4.html',uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses,status="Please input text", frequency=frequency)
+
+            frequency = []
+            for f in relevant_files:
+                text = str(textract.process(os.path.join('app/uploads', f)))
+                frequency.append({"file":f,'token':text_to_operate,'count':text.count(text_to_operate)})
+            for f in relevant_corpuses:
+                text = str(textract.process(os.path.join('app/corpuses', f)))
+                frequency.append({"file":f,'token':text_to_operate,'count':text.count(text_to_operate)})
+            print(frequency)
+            return render_template('functionality4.html', uploaded_files=get_uploaded_files(),
+                                       generated_corpuses=get_corpuses(), frequency=frequency,status=status,zip=zip)
+
+        elif request.method == 'POST' and request.form.get('getTop'):
+            uploaded_files = get_uploaded_files()
+            generated_corpuses = get_corpuses()
+            data = []
+            files = request.form['files']
+            if not files:
+                status = "Please input file name"
+                return render_template('functionality4.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, status=status, data=data,zip=zip)
+            relevant_files = find_relevant_files(files)
+            relevant_corpuses = find_relevant_corpuses(files)
+            if not relevant_files and not relevant_corpuses:
+                status = "No such file exists"
+                return render_template('functionality4.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, status=status, data=data,zip=zip)
+            top_k = request.form.get('top-k')
+            if not top_k:
+                status = "Please input top-k parameter"
+                return render_template('functionality4.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, status=status, data=data,zip=zip)
+            n_gram = request.form.get('n-value')
+            if not n_gram:
+                status = "Please input n-gram parameter"
+                return render_template('functionality4.html', uploaded_files=uploaded_files,
+                                       generated_corpuses=generated_corpuses, status=status, data=data,zip=zip)
+
+            n_gram = int(n_gram)
+            top_k = int(top_k)
+            for f in relevant_files:
+                text = str(textract.process(os.path.join('app/uploads',f)))
+                text = text.replace("\n"," ")
+                text = text.replace("\\"," ")
+
+                nGrams = list(nltk.ngrams(text.split(),n_gram))
+                nGram_list = [" ".join(i) for i in nGrams]
+                freq_dict = dict(Counter(nGram_list))
+                sorted_dict = {k: v for k, v in sorted(freq_dict.items(), key=lambda item: item[1])}
+                print(sorted_dict)
+                last_k_keys = list(sorted_dict.keys())[-top_k:]
+                last_k_values = list(sorted_dict.values())[-top_k:]
+                data.append({"file":f,"n-grams":last_k_keys,"frequency":last_k_values})
+            for f in relevant_corpuses:
+                text = str(textract.process(os.path.join('app/corpuses',f)))
+                text = text.replace("\n"," ")
+                text = text.replace("\\"," ")
+                nGrams = list(nltk.ngrams(text.split(),n_gram))
+                nGram_list = [" ".join(i) for i in nGrams]
+                freq_dict = dict(Counter(nGram_list))
+                sorted_dict = {k: v for k, v in sorted(freq_dict.items(), key=lambda item: item[1])}
+                print(sorted_dict)
+                last_k_keys = list(sorted_dict.keys())[-top_k:]
+                last_k_values = list(sorted_dict.values())[-top_k:]
+                data.append({"file":f,"n-grams":last_k_keys,"frequency":last_k_values})
+
+            return render_template('functionality4.html', uploaded_files=uploaded_files,
+                                   generated_corpuses=generated_corpuses, status="", data=data,zip=zip)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        return render_template('functionality4.html', uploaded_files=uploaded_files,
+                               generated_corpuses=generated_corpuses)
+        
+        
+
+
+
     return render_template(str(page)+'.html')
 
 

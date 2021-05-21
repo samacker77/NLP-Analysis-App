@@ -10,6 +10,23 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title>NLP Analysis App</title>
     <style>
+    table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  color:white;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  color:white;
+}
+
+tr:nth-child(even) {
+  color:black;
+}
         body {
   background-color: purple;
 }
@@ -63,9 +80,11 @@
   </div>
 </nav>
 
+<script type="text/javascript">window.setTimeout("document.getElementById('successMessage').style.display='none';", 2000); </script>
 
+<h3 style="color:white;text-align:center" id="successMessage"> {{status}} </h3>
 <!----->
-    <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">Statistical Analysis</h1>
+   <!-- <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">Statistical Analysis</h1>
 <div style="margin-top:100px;margin-left:500px;margin-right:500px">
 
 <div class="dropdown" style="margin-left:35px;margin-top:0px;margin-bottom:50px">
@@ -114,5 +133,127 @@
 <button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality5') }}';">NEXT</button>
 </div>
 </div>
+-->
+
+
+<h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-bottom:50px">Statistical Analysis</h1>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+
+<div >
+
+
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SEE UPLOADED FILES
+  </button>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+    {% for each in uploaded_files %}
+        <option class="dropdown-item" value="{{each}}">{{each}}</option>
+    {% endfor %}
+  </div>
+</div>
+    <div style="margin-bottom:10px;"></div>
+
+    <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SEE GENERATED CORPUSES
+  </button>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+      {% for each in generated_corpuses %}
+    <option class="dropdown-item" value="{{each}}">{{each}}</option>
+      {% endfor %}
+  </div>
+</div>
+
+
+  <form action="/functionality4" method="POST" enctype="multipart/form-data">
+      <div class="input-group mb-3">
+  <div class="custom-file">
+  </div>
+  <div class="input-group mb-3">
+  <div class="input-group-prepend" >
+    <span class="input-group-text" id="basic-addon3">Files (space separated)</span>
+  </div>
+  <input type="text" class="form-control" name="files" id="getFileNames" aria-describedby="basic-addon3">
+</div>
+        <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon3">Text</span>
+  </div>
+  <input type="text" class="form-control" id="text" name="text" aria-describedby="basic-addon3">
+      </div>
+<input type="submit" class="btn form-control" name="frequency" value="Get Frequency">
+
+
+       <h4 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:25px;margin-top:80px">Find top-k n-grams </h4>
+  <div class="form-row">
+    <div class="col">
+      <input type="text" class="form-control" id="sequence" placeholder="top-k" name="top-k">
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" id="ngram" placeholder="n" name="n-value">
+    </div>
+      <div class="col">
+        <input type="submit" class="btn form-control" name="getTop" value="Get top-k n-grams">
+
+      </div>
+  </div>
+</form>
+
+<div id="next">
+<button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality5') }}';">NEXT</button>
+</div>
+</div>
+
+
+    </div>
+    <div class="col" style="margin-left:50px">
+      <h2 style="text-align:center;color:white;">Frequency Table</h2>
+        <table>
+  <tr>
+    <th>File Name</th>
+    <th>Token</th>
+    <th>Frequency</th>
+  </tr>
+          {% for each in frequency %}
+  <tr>
+    <td>{{each.get('file',None)}}</td>
+    <td>{{each.get('token',None)}}</td>
+    <td>{{each.get('count',None)}}</td>
+  </tr>
+          {%endfor%}
+</table>
+
+
+        <h2 style="text-align:center;color:white;margin-top:50px">Top - k N - grams</h2>
+        <table>
+  <tr>
+    <th>File Name</th>
+    <th>N-Grams</th>
+    <th>Frequency</th>
+  </tr>
+          {% for each in data %}
+            {%for i,j in zip(each.get('n-grams'),each.get('frequency'))%}
+
+            <tr>
+                <td>{{each.get('file')}}</td>
+                <td>{{i}}</td>
+                <td>{{j}}</td>
+
+            </tr>
+            {%endfor%}
+
+
+  </tr>
+          {%endfor%}
+</table>
+
+
+</div>
+
+    </div>
+  </div>
 </body>
 </html>

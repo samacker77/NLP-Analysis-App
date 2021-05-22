@@ -1,5 +1,4 @@
 from flask import Flask, flash, request, redirect, url_for,render_template,send_file
-from flask_session import Session
 
 
 from werkzeug.utils import secure_filename

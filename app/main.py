@@ -329,7 +329,11 @@ def gotoNextPage(page):
                                    generated_corpuses=generated_corpuses, status="", data=data,zip=zip)
 
 
+    elif page == 'functionality5':
 
+
+        return render_template('functionality5.html', uploaded_files=get_uploaded_files(),
+                               generated_corpuses=get_corpuses(), status="")
 
 
 

@@ -57,9 +57,11 @@ import time
 @app.route('/',methods=['POST','GET'])
 def home():
     uploaded_files = get_uploaded_files()
-
+    corpuses = get_corpuses()
     if len(uploaded_files)==0:
         uploaded_files=['No uploaded files']
+    if len(corpuses)==0:
+        uploaded_files=['No corpuses found']
     if request.method == 'POST' and request.form.get('upload'):
         file = request.files['file']
         if request.form['filename']!="":
@@ -79,11 +81,13 @@ def home():
                 path = 'uploads/'+ filename
                 return send_file(path, as_attachment=True)
             else:
-                flash("No such file exists")
+                if filename in corpuses:
+                    path = 'corpuses/' + filename
+                    return send_file(path, as_attachment=True)
         else:
             flash("Please mention filename")
 
-    return render_template('index.html',uploaded_files=uploaded_files)
+    return render_template('index.html',uploaded_files=get_uploaded_files(),generated_corpuses=get_corpuses())
 
 @app.route('/<page>',methods=['POST','GET'])
 def gotoNextPage(page):

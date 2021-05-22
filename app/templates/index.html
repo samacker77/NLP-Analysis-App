@@ -112,6 +112,17 @@
     {% endfor %}
   </div>
 </div>
+        <div class="dropdown" style="margin-left:90px;margin-bottom:10px;">
+
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SEE GENERATED CORPUSES
+  </button>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+      {% for each in generated_corpuses %}
+    <option class="dropdown-item" value="{{each}}">{{each}}</option>
+      {% endfor %}
+  </div>
+</div>
         <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon3">File Name</span>

@@ -90,6 +90,17 @@
 
 <!----->
     <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">Upload/Download</h1>
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SEE SAVED ACTION CHAINS
+  </button>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+        {%for chain in chain_for_UI%}
+        <option class="dropdown-item" value="{{each}}">{{chain}}</option>
+        {%endfor%}
+  </div>
+</div>
+
 <div style="margin-top:200px;margin-left:500px;margin-right:500px">
     <div class="input-group mb-3">
   <div class="custom-file">
@@ -123,6 +134,7 @@
       {% endfor %}
   </div>
 </div>
+
         <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon3">File Name</span>

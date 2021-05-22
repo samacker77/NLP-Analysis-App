@@ -8,6 +8,11 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     <title>NLP Analysis App</title>
     <style>
         body {
@@ -57,48 +62,100 @@ height: 1.25rem;
 
 
 <!----->
-    <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:80px">Action Chaining</h1>
-<div style="margin-top:100px;margin-left:500px;margin-right:500px">
+    <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:30px;margin-bottom:50px">Action Chaining</h1>
 
-<div class="dropdown" style="margin-left:35px;margin-top:0px;margin-bottom:10px">
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+<div>
+
+<div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     SEE UPLOADED FILES
   </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">File 1</a>
-    <a class="dropdown-item" href="#">File 1</a>
-    <a class="dropdown-item" href="#">File 1</a>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+    {% for each in uploaded_files %}
+        <option class="dropdown-item" value="{{each}}">{{each}}</option>
+    {% endfor %}
+  </div>
+</div>
+    <div style="margin-bottom:10px;"></div>
+
+    <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SEE GENERATED CORPUSES
+  </button>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+      {% for each in generated_corpuses %}
+    <option class="dropdown-item" value="{{each}}">{{each}}</option>
+      {% endfor %}
+  </div>
+</div>
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" style="width:400px" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SEE SAVED ACTION CHAINS
+  </button>
+  <div class="dropdown-menu" method="GET" aria-labelledby="dropdownMenuButton">
+        {%for chain in chain_for_UI%}
+        <option class="dropdown-item" value="{{each}}">{{chain}}</option>
+        {%endfor%}
   </div>
 </div>
 
-<h4 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:30px;margin-top:60px">Choose Functionalities</h4>
+<h4 style="font-family:'Montserrat', sans-serif;color:white;font-size:30px;margin-top:60px">Choose Functionalities</h4>
 
-<div class="custom-control form-control-lg custom-checkbox" >
-    <input type="checkbox" class="custom-control-input" id="functionality1">
-    <label class="custom-control-label" for="functionality1" style="color:white">Functionality 1</label>
+<form action="/functionality6" method="POST" enctype="multipart/form-data">
+
+    <div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDisabled" disabled>
+  <label class="form-check-label" for="flexSwitchCheckDisabled" style="color:white;font-size:20px">Upload/Downlaod</label>
+</div>
+    <div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="functionality2">
+  <label class="form-check-label" for="flexSwitchCheckDefault" style="color:white;font-size:20px">Generate Corpus</label>
+</div>
+<div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="functionality3">
+  <label class="form-check-label" for="flexSwitchCheckChecked" style="color:white;font-size:20px">Text Manipulation</label>
+</div>
+    <div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="functionality4">
+  <label class="form-check-label" for="flexSwitchCheckChecked" style="color:white;font-size:20px">Statistical Analysis</label>
+</div>
+    <div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="functionality5">
+  <label class="form-check-label" for="flexSwitchCheckChecked" style="color:white;font-size:20px">Corpus Comparison</label>
+</div>
+
+<div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" id="flexSwitchCheckCheckedDisabled" checked disabled>
+  <label class="form-check-label" for="flexSwitchCheckCheckedDisabled" style="color:white;font-size:20px">Action Chaining</label>
+</div>
+
+    <!--<div class="custom-control form-control-lg custom-checkbox">
+    <input type="checkbox" class="custom-control-input" name="functionality2">
+    <label class="custom-control-label" style="color:white">Generate Corpus</label>
 </div>
 
     <div class="custom-control form-control-lg custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="functionality2">
-    <label class="custom-control-label" for="functionality2" style="color:white">Functionality 2</label>
+    <input type="checkbox" class="custom-control-input" name="functionality3">
+    <label class="custom-control-label" style="color:white">Text Manipulation</label>
 </div>
 
     <div class="custom-control form-control-lg custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="functionality3">
-    <label class="custom-control-label" for="functionality3" style="color:white">Functionality 3</label>
+    <input type="checkbox" class="custom-control-input" name="functionality4">
+    <label class="custom-control-label"  style="color:white">Statistical Analysis</label>
 </div>
 
     <div class="custom-control form-control-lg custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="functionality4">
-    <label class="custom-control-label" for="functionality4" style="color:white">Functionality 4</label>
-</div>
+    <input type="checkbox" class="custom-control-input" name="functionality5">
+    <label class="custom-control-label" style="color:white">Corpus Comparison</label>
+</div>-->
 
-    <div class="custom-control form-control-lg custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="functionality5">
-    <label class="custom-control-label" for="functionality5" style="color:white">Functionality 5</label>
-</div>
-
-    <button type="submit" class="btn btn-light" style="margin-left:180px;margin-top:20px;width:160px;">Submit</button>
+    <input type="submit" name="store" value="Store Action Chain" class="btn btn-light" style="margin-left:180px;margin-top:20px;width:160px;">
+</form>
+</div></div>
 
 
 </div>

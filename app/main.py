@@ -1,4 +1,7 @@
 from flask import Flask, flash, request, redirect, url_for,render_template,send_file
+from flask_session import Session
+
+
 from werkzeug.utils import secure_filename
 import os
 import shutil
@@ -15,11 +18,16 @@ DOWLOAD_FOLDER= 'app/downloads/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'doc','docx'}
 
 app = Flask(__name__)
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = DOWLOAD_FOLDER
-app.secret_key = "jhkafshjkfhfsd"
 CORPUS_FOLDER = 'app/corpuses'
 
+
+def get_chains():
+    with open('app/chains.txt','r') as file:
+        return file.readlines()
 
 def get_uploaded_files():
     global UPLOAD_FOLDER
@@ -87,7 +95,7 @@ def home():
         else:
             flash("Please mention filename")
 
-    return render_template('index.html',uploaded_files=get_uploaded_files(),generated_corpuses=get_corpuses())
+    return render_template('index.html',chain_for_UI=get_chains(),uploaded_files=get_uploaded_files(),generated_corpuses=get_corpuses())
 
 @app.route('/<page>',methods=['POST','GET'])
 def gotoNextPage(page):
@@ -370,11 +378,39 @@ def gotoNextPage(page):
                                generated_corpuses=get_corpuses(), status="",data=data,zip=zip)
 
 
+    elif page == 'functionality6':
+        if request.method == "POST" and request.form.get("store"):
+            global all_action_chains
+            functionality2 = request.form.get('functionality2')
+            functionality3 = request.form.get('functionality3')
+            functionality4 = request.form.get('functionality4')
+            functionality5 = request.form.get('functionality5')
+            funtionalities_that_are_chained = []
+            if functionality2 == 'on':
+                funtionalities_that_are_chained.append("functionality2")
+            if functionality3 == 'on':
+                funtionalities_that_are_chained.append("functionality3")
+            if functionality4 == 'on':
+                funtionalities_that_are_chained.append("functionality4")
+            if functionality5 == 'on':
+                funtionalities_that_are_chained.append("functionality5")
+            print(funtionalities_that_are_chained)
+
+            chain_for_UI = ">>".join(funtionalities_that_are_chained)
+            with open('app/chains.txt','a') as chain_file:
+                chain_file.write(chain_for_UI+"\n")
+            return render_template('functionality6.html', generated_corpuses=get_corpuses(),
+                                   uploaded_files=get_uploaded_files(),chain_for_UI=get_chains())
+
+        return render_template('functionality6.html',generated_corpuses=get_corpuses(),uploaded_files=get_uploaded_files())
 
 
 
-        
-        
+
+
+
+
+
 
 
 

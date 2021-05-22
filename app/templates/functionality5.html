@@ -131,6 +131,9 @@ tr:nth-child(even) {
 </div>
 </div>
 -->
+<script type="text/javascript">window.setTimeout("document.getElementById('successMessage').style.display='none';", 2000); </script>
+
+<h3 style="color:white;text-align:center" id="successMessage"> {{status}} </h3>
 
 
 <h1 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:45px;margin-top:50px;margin-bottom:50px;">Corpus Comparison</h1>
@@ -166,7 +169,7 @@ tr:nth-child(even) {
 </div>
 
 
-  <form action="/functionality4" method="POST" enctype="multipart/form-data">
+  <form action="/functionality5" method="POST" enctype="multipart/form-data">
       <div class="input-group mb-3">
   <div class="custom-file">
   </div>
@@ -184,67 +187,37 @@ tr:nth-child(even) {
 <input type="submit" class="btn form-control" name="frequency" value="Get Frequency">
 
 
-       <h4 style="text-align:center;font-family:'Montserrat', sans-serif;color:white;font-size:25px;margin-top:80px">Find top-k n-grams </h4>
-  <div class="form-row">
-    <div class="col">
-      <input type="text" class="form-control" id="sequence" placeholder="top-k" name="top-k">
-    </div>
-    <div class="col">
-      <input type="text" class="form-control" id="ngram" placeholder="n" name="n-value">
-    </div>
-      <div class="col">
-        <input type="submit" class="btn form-control" name="getTop" value="Get top-k n-grams">
 
-      </div>
-  </div>
 </form>
 
 <div id="next">
-<button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality5') }}';">NEXT</button>
+<button type="button" class="next" onclick="window.location.href='{{ url_for( 'gotoNextPage',page='functionality6') }}';">NEXT</button>
 </div>
 </div>
 
 
     </div>
     <div class="col" style="margin-left:50px">
-      <h2 style="text-align:center;color:white;">Frequency Table</h2>
+
+
+
+        <h2 style="text-align:center;color:white;margin-top:50px">Frequency Table</h2>
         <table>
   <tr>
     <th>File Name</th>
     <th>Token</th>
     <th>Frequency</th>
   </tr>
-          {% for each in frequency %}
-  <tr>
-    <td>{{each.get('file',None)}}</td>
-    <td>{{each.get('token',None)}}</td>
-    <td>{{each.get('count',None)}}</td>
-  </tr>
-          {%endfor%}
-</table>
-
-
-        <h2 style="text-align:center;color:white;margin-top:50px">Top - k N - grams</h2>
-        <table>
-  <tr>
-    <th>File Name</th>
-    <th>N-Grams</th>
-    <th>Frequency</th>
-  </tr>
           {% for each in data %}
-            {%for i,j in zip(each.get('n-grams'),each.get('frequency'))%}
-
             <tr>
                 <td>{{each.get('file')}}</td>
-                <td>{{i}}</td>
-                <td>{{j}}</td>
-
+                <td>{{each.get('token')}}</td>
+                <td>{{each.get('frequency')}}</td>
             </tr>
             {%endfor%}
 
 
   </tr>
-          {%endfor%}
 </table>
 
 

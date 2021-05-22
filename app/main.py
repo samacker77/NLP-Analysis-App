@@ -325,38 +325,56 @@ def gotoNextPage(page):
                 last_k_values = list(sorted_dict.values())[-top_k:]
                 data.append({"file":f,"n-grams":last_k_keys,"frequency":last_k_values})
 
-            return render_template('functionality4.html', uploaded_files=uploaded_files,
-                                   generated_corpuses=generated_corpuses, status="", data=data,zip=zip)
+            return render_template('functionality4.html', uploaded_files=get_uploaded_files(),
+                                   generated_corpuses=get_corpuses(), status="", data=data,zip=zip)
 
 
     elif page == 'functionality5':
+        data = []
+        if request.method == 'POST' and request.form.get('frequency'):
+            files = request.form['files']
+            status = ''
+            print(files)
+
+            if not files:
+                status = "Please input file name"
+                return render_template('functionality5.html', uploaded_files=get_uploaded_files(),
+                                       generated_corpuses=get_corpuses(), status=status)
+
+            relevant_files = find_relevant_files(files)
+            relevant_corpuses = find_relevant_corpuses(files)
+            if not relevant_files and not relevant_corpuses:
+                status = "No such file exists"
+                return render_template('functionality5.html', uploaded_files=get_uploaded_files(),
+                                       generated_corpuses=get_corpuses(), status=status, zip=zip)
+            comparison_text = request.form.get('text')
+            if not comparison_text:
+                status = "Please input text"
+                return render_template('functionality5.html', uploaded_files=get_uploaded_files(),
+                                       generated_corpuses=get_corpuses(), status=status, zip=zip)
 
 
-        return render_template('functionality5.html', uploaded_files=get_uploaded_files(),
-                               generated_corpuses=get_corpuses(), status="")
+            for f in relevant_files:
+                text = str(textract.process(os.path.join("app/uploads",f)))
+                data.append({"file":f,"token":comparison_text,"frequency":text.count(comparison_text)})
+            for f in relevant_corpuses:
+                text = str(textract.process(os.path.join("app/corpuses",f)))
+                data.append({"file":f,"token":comparison_text,"frequency":text.count(comparison_text)})
+
+            print(data)
+            return render_template('functionality5.html', uploaded_files=get_uploaded_files(),
+                               generated_corpuses=get_corpuses(), status="",data=data,zip=zip)
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-        return render_template('functionality4.html', uploaded_files=uploaded_files,
-                               generated_corpuses=generated_corpuses)
         
         
 
 
 
-    return render_template(str(page)+'.html')
+    return render_template(str(page)+'.html',generated_corpuses=get_corpuses(),uploaded_files=get_uploaded_files())
 
 
 def allowed_file(filename):

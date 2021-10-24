@@ -14,7 +14,7 @@ env = jinja2.Environment()
 
 UPLOAD_FOLDER = 'app/uploads/'
 DOWLOAD_FOLDER= 'app/downloads/'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'doc','docx'}
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'doc','docx','rtf','eml','odt'}
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'

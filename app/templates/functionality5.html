@@ -210,7 +210,29 @@ tr:nth-child(even) {
   </tr>
           {% for each in data %}
             <tr>
-                <td>{{each.get('file')}}</td>
+                <td>{{each.get('rusted')}}</td>
+                <td>{{each.get('token')}}</td>
+                <td>{{each.get('frequency')}}</td>
+            </tr>
+            {%endfor%}
+
+
+  </tr>
+            </tr>
+          {% for each in data %}
+            <tr>
+                <td>{{each.get('rusted')}}</td>
+                <td>{{each.get('token')}}</td>
+                <td>{{each.get('frequency')}}</td>
+            </tr>
+            {%endfor%}
+
+
+  </tr>
+            </tr>
+          {% for each in data %}
+            <tr>
+                <td>{{each.get('rusted')}}</td>
                 <td>{{each.get('token')}}</td>
                 <td>{{each.get('frequency')}}</td>
             </tr>
